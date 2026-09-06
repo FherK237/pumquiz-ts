@@ -37,7 +37,7 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 to-indigo-900 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
         <h1 className="text-3xl font-bold text-center text-purple-700 mb-2">PumQuiz!</h1>
-        <p className="text-center text-gray-500 mb-6">Create your account</p>
+        <p className="text-center text-gray-500 mb-6">Crea tu cuenta</p>
 
         {serverError && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -70,7 +70,7 @@ export default function RegisterPage() {
 
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-              Phone
+              Numero Celular
             </label>
             <input
               id="phone"
@@ -107,7 +107,7 @@ export default function RegisterPage() {
 
           <div>
             <label htmlFor="birthday" className="block text-sm font-medium text-gray-700 mb-1">
-              Birthday
+              Fecha de Nacimiento
             </label>
             <input
               id="birthday"
@@ -161,12 +161,12 @@ export default function RegisterPage() {
             disabled={isSubmitting}
             className="w-full py-3 mt-4 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? 'Creating account...' : 'Sign Up'}
+            {isSubmitting ? 'Creando cuenta...' : 'Registrarse'}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-500">
-          Already have an account?{' '}
+          ¿Ya tienes cuenta?{' '}
           <Link to="/login" className="text-purple-600 font-medium hover:underline">
             Log in
           </Link>

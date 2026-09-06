@@ -37,7 +37,7 @@ export default function LoginPage() {
           PumQuiz!
         </h1>
         <h2 className="text-xl font-semibold text-center text-gray-800 mb-6">
-          Log In
+          Iniciar Sesión
         </h2>
 
         {verified && (
@@ -110,12 +110,12 @@ export default function LoginPage() {
             disabled={isSubmitting}
             className="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? 'Logging in...' : 'Log In'}
+            {isSubmitting ? 'Iniciando Sesión...' : 'Iniciar Sesión'}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
+          ¿Aún no tienes cuenta?{' '}
           <Link to="/register" className="text-purple-600 hover:text-purple-700 font-medium">
             Register
           </Link>

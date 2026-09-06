@@ -56,9 +56,9 @@ export default function VerifyEmailPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-purple-600 mb-2">Verify Your Email</h1>
+          <h1 className="text-3xl font-bold text-purple-600 mb-2">Verifica Tu Email</h1>
           <p className="text-gray-600">
-            We sent a 6-digit code to{' '}
+            Enviamos un código de 6 dígitos a{' '}
             <span className="font-semibold text-gray-800">{email}</span>
           </p>
         </div>
@@ -66,7 +66,7 @@ export default function VerifyEmailPage() {
         <form onSubmit={handleVerify} className="space-y-5">
           <div>
             <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-1">
-              Verification Code
+              Código de Verificación
             </label>
             <input
               id="code"
@@ -104,13 +104,13 @@ export default function VerifyEmailPage() {
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            Didn't receive a code?{' '}
+            ¿No recibiste el código?{' '}
             <button
               type="button"
               onClick={handleResend}
               className="text-purple-600 hover:text-purple-700 font-medium hover:underline"
             >
-              Resend code
+              Reenviar Código
             </button>
           </p>
         </div>
