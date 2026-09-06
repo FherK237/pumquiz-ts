@@ -17,16 +17,10 @@ const envSchema = z.object({
   JWT_ACCESS_EXPIRY: z.string().default('15m'),
   JWT_REFRESH_EXPIRY: z.string().default('7d'),
 
-  // Email (Resend API)
-  RESEND_API_KEY: z.string().default(''),
-  EMAIL_FROM: z.string().default('PumQuiz! <onboarding@resend.dev>'),
-
-  // Email (Nodemailer SMTP — legacy, opcional)
-  SMTP_HOST: z.string().default('localhost'),
-  SMTP_PORT: z.string().default('587'),
-  SMTP_USER: z.string().default('user'),
-  SMTP_PASS: z.string().default('pass'),
-  SMTP_FROM: z.string().default('noreply@pumquiz.com'),
+  // Email (Brevo API)
+  BREVO_API_KEY: z.string().default(''),
+  EMAIL_FROM_NAME: z.string().default('PumQuiz!'),
+  EMAIL_FROM_ADDRESS: z.string().default('pumquiz.official@gmail.com'),
 
   // CORS
   FRONTEND_URL: z.string().url().default('http://localhost:5173'),

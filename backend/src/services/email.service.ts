@@ -1,7 +1,6 @@
-import { Resend } from 'resend';
 import { env } from '../config/env';
 
-const resend = new Resend(env.RESEND_API_KEY);
+const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
 const buildHtml = (code: string): string => `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -15,29 +14,38 @@ const buildHtml = (code: string): string => `
 `;
 
 /**
- * Sends the verification email through the Resend HTTP API.
+ * Sends the verification email through the Brevo HTTP API (v3).
  * Uses HTTPS (port 443), which is allowed on hosts like Render that block SMTP.
  * If sending fails, the error is logged but NOT thrown, so registration can
  * still proceed and the user can request a new code via /resend-code.
  */
 export async function sendVerificationEmail(to: string, code: string): Promise<void> {
-  if (!env.RESEND_API_KEY) {
-    console.warn('⚠️  RESEND_API_KEY not set — skipping email send. Verification code:', code);
+  if (!env.BREVO_API_KEY) {
+    console.warn('⚠️  BREVO_API_KEY not set — skipping email send. Verification code:', code);
     return;
   }
 
   try {
-    const { error } = await resend.emails.send({
-      from: env.EMAIL_FROM,
-      to,
-      subject: 'PumQuiz! - Verifica tu email',
-      html: buildHtml(code),
+    const response = await fetch(BREVO_API_URL, {
+      method: 'POST',
+      headers: {
+        'api-key': env.BREVO_API_KEY,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        sender: { name: env.EMAIL_FROM_NAME, email: env.EMAIL_FROM_ADDRESS },
+        to: [{ email: to }],
+        subject: 'PumQuiz! - Verifica tu email',
+        htmlContent: buildHtml(code),
+      }),
     });
 
-    if (error) {
-      console.error('❌ Failed to send verification email:', error);
+    if (!response.ok) {
+      const body = await response.text();
+      console.error(`❌ Brevo email failed (${response.status}):`, body);
     }
   } catch (err) {
-    console.error('❌ Error sending verification email:', err);
+    console.error('❌ Error sending verification email via Brevo:', err);
   }
 }
