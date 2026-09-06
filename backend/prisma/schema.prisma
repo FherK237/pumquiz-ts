@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Enums
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum TriviaType {
+  OFFICIAL
+  COMMUNITY
+}
+
+// Models
+
+model User {
+  id                 String    @id @default(uuid())
+  email              String    @unique
+  username           String    @unique
+  phone              String
+  birthday           DateTime
+  passwordHash       String
+  profilePicture     String?
+  emailVerified      Boolean   @default(false)
+  verificationCode   String?
+  verificationExpiry DateTime?
+  role               Role      @default(USER)
+  currentStreak      Int       @default(0)
+  lastPlayedDate     DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  attempts       Attempt[]
+  bestScores     BestScore[]
+  createdTrivias Trivia[]
+
+  @@map("users")
+}
+
+model Trivia {
+  id         String     @id @default(uuid())
+  title      String
+  category   String
+  difficulty Difficulty
+  type       TriviaType @default(OFFICIAL)
+  createdBy  String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  creator    User       @relation(fields: [createdBy], references: [id])
+  questions  Question[]
+  attempts   Attempt[]
+  bestScores BestScore[]
+
+  @@map("trivias")
+}
+
+model Question {
+  id           String   @id @default(uuid())
+  triviaId     String
+  question     String
+  options      String[]
+  correctIndex Int
+  explanation  String?
+
+  trivia  Trivia   @relation(fields: [triviaId], references: [id], onDelete: Cascade)
+  answers Answer[]
+
+  @@map("questions")
+}
+
+model Attempt {
+  id           String   @id @default(uuid())
+  userId       String
+  triviaId     String
+  totalScore   Int
+  correctCount Int
+  completedAt  DateTime @default(now())
+
+  user    User     @relation(fields: [userId], references: [id])
+  trivia  Trivia   @relation(fields: [triviaId], references: [id])
+  answers Answer[]
+
+  @@map("attempts")
+}
+
+model Answer {
+  id            String  @id @default(uuid())
+  attemptId     String
+  questionId    String
+  selectedIndex Int?
+  isCorrect     Boolean
+  responseTime  Float
+  pointsEarned  Int
+
+  attempt  Attempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id])
+
+  @@map("answers")
+}
+
+model BestScore {
+  id         String   @id @default(uuid())
+  userId     String
+  triviaId   String
+  score      Int
+  achievedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  trivia Trivia @relation(fields: [triviaId], references: [id])
+
+  @@unique([userId, triviaId])
+  @@map("best_scores")
+}

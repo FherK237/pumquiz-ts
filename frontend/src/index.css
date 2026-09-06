@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+body {
+  background: linear-gradient(to bottom right, #7e22ce, #312e81); /*#3c0366; /* bg-gray-50 */
+  background-attachment: fixed;
+}
