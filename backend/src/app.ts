@@ -13,6 +13,10 @@ import triviaRoutes from './routes/trivia.routes';
 
 const app = express();
 
+// Trust the reverse proxy (Render, Vercel, etc.) so that express-rate-limit
+// and other middleware can read the real client IP from X-Forwarded-For.
+app.set('trust proxy', 1);
+
 // Security headers.
 // crossOriginResourcePolicy is set to 'cross-origin' so that uploaded avatars
 // served from /uploads can still be loaded by the frontend origin.
