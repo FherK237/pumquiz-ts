@@ -17,9 +17,6 @@ export default function RegisterPage() {
 
   const [showPass, setShowPass] = useState(false);
 
-  const togglePass = () => {
-    setShowPass(!showPass);
-  };
 
   const onSubmit = async (data: RegisterRequest) => {
     try {

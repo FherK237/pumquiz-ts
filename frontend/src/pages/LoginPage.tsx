@@ -18,10 +18,6 @@ export default function LoginPage() {
 
   const [showPass, setShowPass] = useState(false);
 
-  const togglePass = () => {
-    setShowPass(!showPass);
-  };
-
   const verified = (location.state as { verified?: boolean } | null)?.verified;
 
   const onSubmit = async (data: LoginRequest) => {
