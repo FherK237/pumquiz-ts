@@ -9,7 +9,7 @@ import OptionButton from '../components/OptionButton';
 
 type OptionState = 'default' | 'correct' | 'incorrect' | 'revealed' | 'disabled';
 
-const TIMER_DURATION = 12;
+const TIMER_DURATION = 20;
 const FEEDBACK_DELAY = 2000;
 
 export default function PlayPage() {

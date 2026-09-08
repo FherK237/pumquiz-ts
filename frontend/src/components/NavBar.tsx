@@ -67,7 +67,7 @@ export function NavBar() {
       </nav>
 
       {/* Mobile bottom tab bar */}
-      {/* <nav className="m-3 md:hidden fixed bottom-0 left-0 right-0 z-50 bg-purple-100 border-t border-gray-200 shadow-[0_-1px_8px_rgba(0,0,0,0.06)] pb-[env(safe-area-inset-bottom)] rounded-2xl">
+      <nav className="m-3 md:hidden fixed bottom-0 left-0 right-0 z-50 bg-purple-400/30 border-t border-gray-200 shadow-[0_-1px_8px_rgba(0,0,0,0.06)] pb-[env(safe-area-inset-bottom)] rounded-2xl backdrop-blur-sm">
         <div className="flex items-stretch">
           {navItems.map(({ to, label, icon: Icon, end }) => (
             <NavLink key={to} to={to} end={end} className={tabClass}>
@@ -76,9 +76,9 @@ export function NavBar() {
             </NavLink>
           ))}
         </div>
-      </nav> */}
+      </nav>
 
-      <nav className="px-2 m-4 md:hidden fixed left-0 right-0 z-50 bg-purple-400/30 border-t border-gray-200 shadow-[0_-1px_8px_rgba(0,0,0,0.06)] pb-[env(safe-area-inset-bottom)] rounded-2xl backdrop-blur-sm">
+      {/* <nav className="px-2 m-4 md:hidden fixed left-0 right-0 z-50 bg-purple-400/30 border-t border-gray-200 shadow-[0_-1px_8px_rgba(0,0,0,0.06)] pb-[env(safe-area-inset-bottom)] rounded-2xl backdrop-blur-sm">
         <div className="flex items-center justify-between gap-4 h-16">
             <Link to="/" className="text-2xl font-bold text-purple-500 shrink-0">
               PumQuiz!
@@ -90,7 +90,7 @@ export function NavBar() {
             </NavLink>
           ))}
         </div>
-      </nav>
+      </nav> */}
     </>
   );
 }
