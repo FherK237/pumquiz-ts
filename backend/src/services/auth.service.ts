@@ -154,6 +154,7 @@ export async function login(email: string, password: string) {
       email: user.email,
       profilePicture: user.profilePicture,
       currentStreak: user.currentStreak,
+      role: user.role,
     },
   };
 }

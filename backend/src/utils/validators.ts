@@ -48,18 +48,51 @@ export const submitAttemptSchema = z.object({
   ),
 });
 
+const questionSchema = z.object({
+  question: z.string(),
+  options: z.array(z.string()).length(4),
+  correctIndex: z.number().min(0).max(3),
+  explanation: z.string().optional(),
+});
+
 export const uploadTriviaSchema = z.object({
   title: z.string(),
   category: z.string(),
   difficulty: z.enum(['EASY', 'MEDIUM', 'HARD']),
-  questions: z
-    .array(
-      z.object({
-        question: z.string(),
-        options: z.array(z.string()).length(4),
-        correctIndex: z.number().min(0).max(3),
-        explanation: z.string().optional(),
-      })
-    )
-    .length(10),
+  questions: z.array(questionSchema).length(10),
 });
+
+// Question that can carry an id so existing questions are updated in place
+// (preserving their id) instead of being deleted and recreated.
+const editableQuestionSchema = z.object({
+  id: z.string().uuid().optional(),
+  question: z.string(),
+  options: z.array(z.string()).length(4),
+  correctIndex: z.number().min(0).max(3),
+  explanation: z.string().optional(),
+});
+
+// Edit trivia: all fields optional so an admin can update only what changes.
+// If `questions` is provided, it must be the full set of 10.
+export const updateTriviaSchema = z
+  .object({
+    title: z.string().optional(),
+    category: z.string().optional(),
+    difficulty: z.enum(['EASY', 'MEDIUM', 'HARD']).optional(),
+    questions: z.array(editableQuestionSchema).length(10).optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'At least one field must be provided to update',
+  });
+
+// Edit a single question. All fields optional; at least one required.
+export const updateQuestionSchema = z
+  .object({
+    question: z.string().optional(),
+    options: z.array(z.string()).length(4).optional(),
+    correctIndex: z.number().min(0).max(3).optional(),
+    explanation: z.string().nullable().optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'At least one field must be provided to update',
+  });

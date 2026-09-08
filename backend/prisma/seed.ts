@@ -1,11 +1,13 @@
 import { PrismaClient, Difficulty, Role, TriviaType } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import { hashPassword } from '../src/utils/password';
 
 dotenv.config();
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 interface SeedQuestion {
@@ -25,7 +27,7 @@ interface SeedTrivia {
 const trivias: SeedTrivia[] = [
   {
     title: 'Mundial 2026',
-    category: 'Mundial 2026',
+    category: 'Futbol',
     difficulty: Difficulty.EASY,
     questions: [
       {
@@ -258,8 +260,8 @@ const trivias: SeedTrivia[] = [
     ],
   },
   {
-    title: 'Cultura General',
-    category: 'cultura general',
+    title: 'Cultura General 1',
+    category: 'Conocimiento General',
     difficulty: Difficulty.MEDIUM,
     questions: [
       {
@@ -418,7 +420,7 @@ const trivias: SeedTrivia[] = [
   },  
   {
     title: 'JavaScript - Conceptos Básicos y Métodos',
-    category: 'Desarrollo Web',
+    category: 'Programación',
     difficulty: 'MEDIUM',
     questions: [
       {
@@ -1087,8 +1089,8 @@ const trivias: SeedTrivia[] = [
     ],
   },
   {
-    title: 'Mitología Griega y Nórdica',
-    category: 'Cultura General',
+    title: 'Mitología Griega',
+    category: 'Mitologías',
     difficulty: 'HARD',
     questions: [
       {
@@ -1098,22 +1100,10 @@ const trivias: SeedTrivia[] = [
         explanation: 'Crono (o Cronos) era el líder de los titanes que devoraba a sus hijos hasta que Zeus lo derrocó.'
       },
       {
-        question: '¿Cómo se llama el martillo mágico del dios nórdico Thor?',
-        options: ['Gungnir', 'Mjolnir', 'Excalibur', 'Leviathán'],
-        correctIndex: 1,
-        explanation: 'El Mjolnir fue forjado por los enanos y es una de las armas más temibles de la mitología nórdica.'
-      },
-      {
         question: '¿Quién es la diosa griega de la sabiduría, la guerra justa y la artesanía?',
         options: ['Afrodita', 'Hera', 'Atenea', 'Artemisa'],
         correctIndex: 2,
         explanation: 'Atenea nació ya adulta y armada de la cabeza de Zeus tras sufrir este un gran dolor.'
-      },
-      {
-        question: '¿Cómo se llama el gran árbol de la vida que conecta los nueve mundos en la mitología nórdica?',
-        options: ['Yggdrasil', 'Asgard', 'Valhalla', 'Ragnarök'],
-        correctIndex: 0,
-        explanation: 'Yggdrasil es el colosal fresno perenne cuyas ramas y raíces unen los distintos reinos cósmicos.'
       },
       {
         question: '¿Qué criatura de la mitología griega convertía en piedra a todo el que la mirara a los ojos?',
@@ -1122,22 +1112,10 @@ const trivias: SeedTrivia[] = [
         explanation: 'Medusa era una de las tres gorgonas y la única mortal, finalmente decapitada por el héroe Perseo.'
       },
       {
-        question: '¿Quién es el dios de las mentiras y las trampas en la mitología nórdica?',
-        options: ['Balder', 'Odín', 'Loki', 'Heimdall'],
-        correctIndex: 2,
-        explanation: 'Loki es el dios embaucador, maestro del engaño y cambiador de formas.'
-      },
-      {
         question: '¿Cuál es el nombre del perro de tres cabezas que vigila la entrada al inframundo griego?',
         options: ['Ortro', 'Cerbero', 'Quimera', 'Tifón'],
         correctIndex: 1,
         explanation: 'Cerbero, mascota de Hades, asegura que los muertos no salgan y los vivos no entren al inframundo.'
-      },
-      {
-        question: 'En el mito nórdico, ¿quiénes recogen a los guerreros caídos heroicamente en batalla para llevarlos al Valhalla?',
-        options: ['Los elfos', 'Las Valquirias', 'Los enanos', 'Los gigantes'],
-        correctIndex: 1,
-        explanation: 'Las Valquirias, sirvientes de Odín, seleccionan a los guerreros más valientes (los Einherjer).'
       },
       {
         question: '¿Qué héroe griego era invulnerable en todo su cuerpo excepto en el talón?',
@@ -1146,16 +1124,107 @@ const trivias: SeedTrivia[] = [
         explanation: 'Aquiles fue sumergido de bebé en el río Estigia por su madre, quien lo sujetó por el talón, dejándolo vulnerable ahí.'
       },
       {
+        question: '¿Quién es considerado el rey de los dioses olímpicos y dios del trueno?',
+        options: ['Apolo', 'Ares', 'Zeus', 'Hades'],
+        correctIndex: 2,
+        explanation: 'Zeus gobernaba a los dioses del Monte Olimpo y su arma principal era el rayo.'
+      },
+      {
+        question: '¿Qué dios griego es conocido por ser el mensajero de los dioses y usar sandalias aladas?',
+        options: ['Hermes', 'Dioniso', 'Hefesto', 'Perseo'],
+        correctIndex: 0,
+        explanation: 'Hermes es el dios de los viajeros, comerciantes y ladrones, y actúa como heraldo del Olimpo.'
+      },
+      {
+        question: '¿Qué semidiós griego es famoso por haber completado doce trabajos imposibles?',
+        options: ['Teseo', 'Jasón', 'Heracles (Hércules)', 'Belerofonte'],
+        correctIndex: 2,
+        explanation: 'Heracles tuvo que cumplir los doce trabajos como penitencia impuesta por el rey Euristeo.'
+      },
+      {
+        question: '¿Qué dios griego fue condenado a gobernar el inframundo tras repartirse el mundo con sus hermanos?',
+        options: ['Ares', 'Poseidón', 'Hades', 'Crono'],
+        correctIndex: 2,
+        explanation: 'Hades recibió el inframundo, mientras que Zeus se quedó con el cielo y Poseidón con los mares.'
+      },
+      {
+        question: '¿Qué arma característica lleva Poseidón, el dios de los mares y los terremotos?',
+        options: ['Un rayo', 'Un tridente', 'Un martillo', 'Un arco'],
+        correctIndex: 1,
+        explanation: 'El tridente le permite a Poseidón agitar las aguas, crear tormentas y causar terremotos.'
+      },
+    ],
+  },
+  {
+    title: 'Mitología Nórdica',
+    category: 'Mitologías',
+    difficulty: 'HARD',
+    questions: [
+      {
+        question: '¿Cómo se llama el martillo mágico del dios nórdico Thor?',
+        options: ['Gungnir', 'Mjolnir', 'Excalibur', 'Leviathán'],
+        correctIndex: 1,
+        explanation: 'El Mjolnir fue forjado por los enanos y es una de las armas más temibles de la mitología nórdica.'
+      },
+      {
+        question: '¿Cómo se llama el gran árbol de la vida que conecta los nueve mundos en la mitología nórdica?',
+        options: ['Yggdrasil', 'Asgard', 'Valhalla', 'Ragnarök'],
+        correctIndex: 0,
+        explanation: 'Yggdrasil es el colosal fresno perenne cuyas ramas y raíces unen los distintos reinos cósmicos.'
+      },
+      {
+        question: '¿Quién es el dios de las mentiras y las trampas en la mitología nórdica?',
+        options: ['Balder', 'Odín', 'Loki', 'Heimdall'],
+        correctIndex: 2,
+        explanation: 'Loki es el dios embaucador, maestro del engaño y cambiador de formas.'
+      },
+      {
+        question: 'En el mito nórdico, ¿quiénes recogen a los guerreros caídos heroicamente en batalla para llevarlos al Valhalla?',
+        options: ['Los elfos', 'Las Valquirias', 'Los enanos', 'Los gigantes'],
+        correctIndex: 1,
+        explanation: 'Las Valquirias, sirvientes de Odín, seleccionan a los guerreros más valientes (los Einherjer).'
+      },
+      {
         question: '¿Cómo se llaman los dos cuervos de Odín que vuelan por el mundo trayéndole información?',
         options: ['Hugin y Munin', 'Geri y Freki', 'Sköll y Hati', 'Fenrir y Jörmungandr'],
         correctIndex: 0,
         explanation: 'Hugin (pensamiento) y Munin (memoria) viajan diariamente por Midgard para mantener informado al Padre de Todo.'
       },
+      {
+        question: '¿Cómo se llama el dios principal de la mitología nórdica, conocido como el Padre de Todo?',
+        options: ['Thor', 'Odín', 'Tyr', 'Balder'],
+        correctIndex: 1,
+        explanation: 'Odín es el rey de los dioses Æsir, dios de la guerra, la muerte, la sabiduría y la poesía.'
+      },
+      {
+        question: '¿Qué nombre recibe el evento profético que marca la gran batalla del fin del mundo y la muerte de los dioses?',
+        options: ['Valhalla', 'Fimbulwinter', 'Ragnarök', 'Asgard'],
+        correctIndex: 2,
+        explanation: 'El Ragnarök es el destino final de los dioses, donde figuras como Odín, Thor y Loki encontrarán su fin.'
+      },
+      {
+        question: '¿Cómo se llama el monstruoso lobo gigante que está destinado a devorar a Odín durante el fin del mundo?',
+        options: ['Sköll', 'Hati', 'Fenrir', 'Jörmungandr'],
+        correctIndex: 2,
+        explanation: 'Fenrir es uno de los hijos de Loki, un lobo tan temible que los dioses tuvieron que encadenarlo mágicamente.'
+      },
+      {
+        question: '¿Qué es el Bifröst en la cosmología nórdica?',
+        options: ['Un salón para los caídos', 'Un puente de arcoíris ardiente', 'El martillo de un dios', 'Un barco mágico'],
+        correctIndex: 1,
+        explanation: 'El Bifröst es el puente que conecta Midgard (el mundo humano) con Asgard (el reino de los dioses).'
+      },
+      {
+        question: '¿Qué diosa nórdica está asociada con el amor, la belleza, la fertilidad y recibe a la mitad de los muertos en combate?',
+        options: ['Frigg', 'Freyja', 'Hel', 'Sif'],
+        correctIndex: 1,
+        explanation: 'Freyja gobierna el campo celestial Fólkvangr, donde acoge a la mitad de los guerreros caídos, mientras que Odín recibe a la otra mitad.'
+      },
     ],
   },
   {
     title: 'Arte y Literatura',
-    category: 'Cultura General',
+    category: 'Arte y Literatura',
     difficulty: 'HARD',
     questions: [
       {
@@ -1418,39 +1487,503 @@ const trivias: SeedTrivia[] = [
         options: ['José de San Martín', 'Simón Bolívar', 'Bernardo O\'Higgins', 'Miguel Hidalgo'],
         correctIndex: 1,
         explanation: 'Simón Bolívar, conocido como El Libertador, fue fundamental en la emancipación de Sudamérica frente al Imperio Español.'
+      },
+    ],
+  },
+  {
+    title: 'Cultura Pop y Marcas',
+    category: 'Marketing',
+    difficulty: 'EASY',
+    questions: [
+      {
+        question: '¿Qué eslogan mundialmente famoso pertenece a la marca deportiva Nike?',
+        options: ['Impossible is nothing', 'Just Do It', 'I\'m lovin\' it', 'Think Different'],
+        correctIndex: 1,
+        explanation: 'El eslogan \'Just Do It\' fue creado en 1988 por la agencia Wieden+Kennedy y es uno de los más reconocidos de la historia.'
+      },
+      {
+        question: '¿A qué se dedicaba la compañía Nintendo cuando se fundó en Japón en 1889?',
+        options: ['Fabricar juguetes de madera', 'Desarrollar software para bancos', 'Producir cartas de juego tradicionales (Hanafuda)', 'Ensamblar radios'],
+        correctIndex: 2,
+        explanation: 'Mucho antes de los videojuegos, Nintendo comenzó como una empresa de barajas de cartas tradicionales japonesas llamadas Hanafuda.'
+      },
+      {
+        question: '¿Qué animal es la mascota original de los cereales Zucaritas de Kellogg\'s?',
+        options: ['Un elefante', 'Un tucán', 'Un oso', 'Un tigre'],
+        correctIndex: 3,
+        explanation: 'El Tigre Toño (Tony the Tiger) ha sido la mascota de las Zucaritas desde la década de 1950.'
+      },
+      {
+        question: '¿Qué objeto cotidiano inspiró a Toru Iwatani para diseñar al personaje de Pac-Man?',
+        options: ['Una rueda de queso', 'Una pizza a la que le faltaba una rebanada', 'Una dona', 'Un reloj de arena'],
+        correctIndex: 1,
+        explanation: 'El diseño icónico nació cuando el creador vio una pizza con una porción faltante, dándole la forma de la boca abierta.'
+      },
+      {
+        question: '¿Qué representaba el primer y complejo logotipo de la empresa Apple en 1976?',
+        options: ['A Isaac Newton leyendo bajo un manzano', 'Un huerto de manzanas', 'Una computadora retro', 'Un arcoíris pixelado'],
+        correctIndex: 0,
+        explanation: 'El diseño original mostraba a Sir Isaac Newton a punto de descubrir la gravedad con una manzana colgando sobre su cabeza.'
+      },
+      {
+        question: '¿Qué marca popularizó la imagen moderna de Santa Claus vistiendo de rojo y blanco?',
+        options: ['Pepsi', 'Macy\'s', 'Coca-Cola', 'Sears'],
+        correctIndex: 2,
+        explanation: 'Aunque ya existían representaciones previas, Coca-Cola estandarizó el traje rojo y blanco de Santa en sus campañas de los años 30.'
+      },
+      {
+        question: '¿Qué significa el detalle de la flecha amarilla en el logotipo de Amazon?',
+        options: ['Entregas rápidas', 'Una sonrisa y que venden productos de la \'A\' a la \'Z\'', 'Que la empresa siempre avanza', 'Es un símbolo de reciclaje'],
+        correctIndex: 1,
+        explanation: 'La flecha forma una sonrisa y apunta desde la letra A hasta la Z, indicando que tienen absolutamente todo tipo de productos.'
+      },
+      {
+        question: '¿Qué bebida gaseosa fue inventada originalmente en 1886 por un farmacéutico como jarabe para la digestión?',
+        options: ['Dr Pepper', 'Sprite', '7 Up', 'Coca-Cola'],
+        correctIndex: 3,
+        explanation: 'John Pemberton inventó la Coca-Cola buscando crear un jarabe medicinal que también aportara energía.'
+      },
+      {
+        question: '¿Qué famoso buscador web recibió inicialmente el nombre de proyecto \'BackRub\'?',
+        options: ['Yahoo!', 'Bing', 'Google', 'AltaVista'],
+        correctIndex: 2,
+        explanation: 'Larry Page y Sergey Brin lo llamaron BackRub en 1996 por su sistema de analizar los \'backlinks\' de la web, antes de cambiarlo a Google.'
+      },
+      {
+        question: '¿Cuál es la franquicia de videojuegos más rentable y con mayores ingresos de la historia?',
+        options: ['Super Mario', 'Pokémon', 'Call of Duty', 'Grand Theft Auto'],
+        correctIndex: 1,
+        explanation: 'Pokémon es la franquicia de medios más valiosa del mundo, sumando videojuegos, cartas, mercancía y anime.'
+      },
+    ],
+  },
+  {
+    title: 'Psicología del Consumidor',
+    category: 'Marketing',
+    difficulty: 'MEDIUM',
+    questions: [
+      {
+        question: '¿Cómo se llama el sesgo psicológico que hace que un precio de $9.99 parezca mucho más barato que uno de $10.00?',
+        options: ['Efecto anclaje', 'Efecto del dígito izquierdo', 'Descuento hiperbólico', 'Efecto placebo'],
+        correctIndex: 1,
+        explanation: 'El cerebro procesa los números de izquierda a derecha; al ver el 9 primero, codifica el precio como significativamente menor a 10.'
+      },
+      {
+        question: '¿Qué color utilizan frecuentemente las cadenas de comida rápida para estimular el apetito y transmitir urgencia?',
+        options: ['Verde', 'Rojo', 'Azul', 'Morado'],
+        correctIndex: 1,
+        explanation: 'El rojo aumenta el ritmo cardíaco y crea un sentido de urgencia, siendo ideal para rotar clientes rápidamente en los restaurantes.'
+      },
+      {
+        question: '¿A qué altura de las estanterías de un supermercado se colocan los productos que dejan mayor margen de ganancia?',
+        options: ['En el estante más bajo', 'A la altura de las rodillas', 'A la altura de los ojos', 'En el estante más alto'],
+        correctIndex: 2,
+        explanation: 'Las marcas pagan más por estar a la altura de los ojos del consumidor promedio, ya que esos productos son los más comprados.'
+      },
+      {
+        question: '¿Qué emoción principal busca transmitir el color azul en los logotipos de bancos y aseguradoras?',
+        options: ['Creatividad', 'Confianza y seguridad', 'Apetito', 'Rebeldía'],
+        correctIndex: 1,
+        explanation: 'El azul transmite serenidad, profesionalismo y estabilidad, cualidades vitales para instituciones financieras.'
+      },
+      {
+        question: '¿Qué sesgo cognitivo aprovechan páginas web al mostrar el mensaje \'¡Solo quedan 2 habitaciones a este precio!\'?',
+        options: ['Principio de escasez', 'Prueba social', 'Aversión a la pérdida', 'Efecto arrastre'],
+        correctIndex: 0,
+        explanation: 'La escasez genera un sentimiento de urgencia, presionando al consumidor a comprar por miedo a perder la oportunidad.'
+      },
+      {
+        question: '¿Cómo se le llama a la estrategia de vender un producto muy barato o con pérdidas para atraer clientes a la tienda?',
+        options: ['Venta cruzada', 'Producto gancho', 'Fijación de precios premium', 'Descremado'],
+        correctIndex: 1,
+        explanation: 'El producto gancho (loss leader) atrae a los clientes con la esperanza de que terminen comprando otros artículos más rentables.'
+      },
+      {
+        question: '¿Qué es el \'Efecto IKEA\' en la psicología del consumidor?',
+        options: ['Comprar muebles innecesarios', 'Valorar más un producto porque uno mismo lo ha ensamblado', 'Perderse en una tienda grande', 'Preferir diseños minimalistas'],
+        correctIndex: 1,
+        explanation: 'Las personas tienden a atribuir un valor desproporcionadamente alto a los productos en cuya creación o montaje han participado.'
+      },
+      {
+        question: '¿Por qué los supermercados suelen poner artículos de primera necesidad (como la leche) al fondo de la tienda?',
+        options: ['Para mantenerlos fríos', 'Por razones de peso en los estantes', 'Para obligar al cliente a recorrer todos los pasillos', 'Porque llegan al final del día'],
+        correctIndex: 2,
+        explanation: 'Forzar el recorrido aumenta las compras impulsivas al exponer al cliente a muchos otros productos en su camino.'
+      },
+      {
+        question: '¿Qué principio de persuasión se usa cuando una marca incluye reseñas y testimonios de otros compradores?',
+        options: ['Escasez', 'Autoridad', 'Simpatía', 'Prueba Social (Social Proof)'],
+        correctIndex: 3,
+        explanation: 'La prueba social indica que las personas tienden a hacer lo que ven que hacen los demás, confiando en la experiencia colectiva.'
+      },
+      {
+        question: '¿Por qué los casinos y centros comerciales suelen carecer de ventanas y relojes en las paredes?',
+        options: ['Por razones de seguridad contra robos', 'Para ahorrar en costos de construcción', 'Para que los clientes pierdan la noción del tiempo y se queden más', 'Para evitar la luz del sol en los productos'],
+        correctIndex: 2,
+        explanation: 'Al aislar al consumidor del mundo exterior, se fomenta una inmersión total que prolonga su tiempo en el establecimiento.'
+      },
+    ],
+  },
+  {
+    title: 'Marketing Digital y Web',
+    category: 'Marketing',
+    difficulty: 'MEDIUM',
+    questions: [
+      {
+        question: '¿Qué significan las siglas SEO en el marketing digital?',
+        options: ['Search Engine Optimization', 'Social Engagement Options', 'Sales and Electronic Offers', 'System Error Output'],
+        correctIndex: 0,
+        explanation: 'La optimización para motores de búsqueda (SEO) busca mejorar el posicionamiento orgánico de una web en Google u otros buscadores.'
+      },
+      {
+        question: '¿Qué métrica mide el porcentaje de usuarios que hacen clic en un anuncio respecto al total de impresiones?',
+        options: ['CPA (Costo Por Adquisición)', 'CTR (Click-Through Rate)', 'ROI (Retorno de Inversión)', 'CPM (Costo Por Mil)'],
+        correctIndex: 1,
+        explanation: 'El CTR ayuda a medir la efectividad de un anuncio; a mayor porcentaje, más relevante es el anuncio para la audiencia.'
+      },
+      {
+        question: '¿Cuál es el principal objetivo de las campañas de Remarketing o Retargeting?',
+        options: ['Atraer seguidores de la competencia', 'Mostrar anuncios a usuarios que ya interactuaron previamente con tu marca', 'Mejorar el diseño de un logotipo', 'Reducir el costo del producto'],
+        correctIndex: 1,
+        explanation: 'El remarketing \'persigue\' a los usuarios que visitaron tu web pero no compraron, mostrándoles anuncios para que regresen.'
+      },
+      {
+        question: '¿Qué herramienta gratuita de Google es el estándar mundial para analizar el tráfico y comportamiento de los usuarios en un sitio web?',
+        options: ['Google Ads', 'Google Drive', 'Google Analytics', 'Google Search Console'],
+        correctIndex: 2,
+        explanation: 'Google Analytics permite rastrear de dónde vienen los visitantes, cuánto tiempo se quedan y qué páginas visitan.'
+      },
+      {
+        question: '¿Qué formato de contenido visual efímero (que desaparece en 24 horas) fue popularizado por Snapchat y luego integrado en Instagram?',
+        options: ['Reels', 'Shorts', 'Historias (Stories)', 'IGTV'],
+        correctIndex: 2,
+        explanation: 'Las Stories revolucionaron el consumo de contenido en redes sociales al fomentar la autenticidad y el formato vertical de corta duración.'
+      },
+      {
+        question: '¿Cómo se le llama a la métrica que indica el porcentaje de visitantes que abandonan una web después de ver solo una sola página?',
+        options: ['Tasa de conversión', 'Tasa de retención', 'Tasa de clic', 'Tasa de rebote (Bounce Rate)'],
+        correctIndex: 3,
+        explanation: 'Una alta tasa de rebote puede indicar que la página no era lo que el usuario buscaba, o que tardó mucho en cargar.'
+      },
+      {
+        question: '¿Qué significa el término CTA o \'Call to Action\'?',
+        options: ['Llamada a la Acción: Un botón o enlace que incita al usuario a dar un paso específico', 'Contact to Admin: Formulario de quejas', 'Cost to Acquire: Dinero invertido por cliente', 'Code to Access: Una contraseña'],
+        correctIndex: 0,
+        explanation: 'Ejemplos clásicos de CTA son los botones de \'Comprar ahora\', \'Suscribirse\' o \'Más información\'.'
+      },
+      {
+        question: '¿Qué tipo de modelo publicitario digital cobra al anunciante solo cuando el usuario hace clic en el anuncio?',
+        options: ['PPS (Pay Per Sale)', 'PPC (Pay Per Click)', 'CPM (Cost Per Mille)', 'CPL (Cost Per Lead)'],
+        correctIndex: 1,
+        explanation: 'El Pago Por Clic (PPC) es la base de plataformas como Google Ads, garantizando que solo pagas por tráfico real.'
+      },
+      {
+        question: '¿Qué tipo de marketing se enfoca en colaborar con personas que tienen una gran comunidad en redes sociales para promocionar productos?',
+        options: ['Marketing de Afiliados', 'Inbound Marketing', 'Marketing de Influencers', 'Email Marketing'],
+        correctIndex: 2,
+        explanation: 'Las marcas aprovechan la confianza y autoridad que los creadores de contenido tienen sobre su nicho de seguidores.'
+      },
+      {
+        question: '¿Cómo se le llama a la estrategia de crear y distribuir artículos, videos o podcasts relevantes para atraer y retener a una audiencia?',
+        options: ['Marketing de Contenidos (Content Marketing)', 'Outbound Marketing', 'Telemarketing', 'Growth Hacking'],
+        correctIndex: 0,
+        explanation: 'En lugar de anuncios directos, el marketing de contenidos educa o entretiene al usuario para generar lealtad a largo plazo.'
+      },
+    ],
+  },
+  {
+    title: 'Negocios y Teoría Clásica',
+    category: 'Administración',
+    difficulty: 'HARD',
+    questions: [
+      {
+        question: '¿Cuáles son las tradicionales 4 P\'s del Marketing Mix original propuesto por E. Jerome McCarthy?',
+        options: ['Persona, Problema, Promesa, Prueba', 'Producto, Precio, Plaza, Promoción', 'Plan, Proceso, Presupuesto, Publicidad', 'Poder, Política, Posición, Patente'],
+        correctIndex: 1,
+        explanation: 'Estas cuatro variables (Product, Price, Place, Promotion) son la base de la estrategia de marketing tradicional.'
+      },
+      {
+        question: 'En un análisis FODA (DAFO), ¿qué elementos representan los factores internos sobre los que la empresa tiene control?',
+        options: ['Oportunidades y Amenazas', 'Fortalezas y Oportunidades', 'Fortalezas y Debilidades', 'Debilidades y Amenazas'],
+        correctIndex: 2,
+        explanation: 'Las fortalezas y debilidades son internas a la organización, mientras que las oportunidades y amenazas provienen del entorno externo.'
+      },
+      {
+        question: '¿Qué estructura de mercado se caracteriza por tener un solo proveedor que controla toda la oferta de un bien o servicio?',
+        options: ['Oligopolio', 'Monopsonio', 'Competencia Perfecta', 'Monopolio'],
+        correctIndex: 3,
+        explanation: 'En un monopolio, la falta de competencia le permite a la empresa tener un alto poder para dictar los precios del mercado.'
+      },
+      {
+        question: '¿Qué indicador financiero mide el beneficio obtenido en relación con el capital invertido en una campaña o proyecto?',
+        options: ['EBITDA', 'ROI (Retorno de Inversión)', 'Punto de Equilibrio', 'Flujo de Caja'],
+        correctIndex: 1,
+        explanation: 'El ROI (Return on Investment) es la métrica reina para saber si una inversión generó ganancias o pérdidas.'
+      },
+      {
+        question: '¿Qué nombre recibe un segmento muy específico de mercado que no está siendo bien atendido y ofrece una oportunidad de negocio?',
+        options: ['Océano Rojo', 'Mercado de Masas', 'Nicho de mercado', 'Monopolio natural'],
+        correctIndex: 2,
+        explanation: 'Los nichos permiten a pequeñas empresas competir sin enfrentarse directamente a los gigantes corporativos.'
+      },
+      {
+        question: 'En la Matriz BCG, ¿cómo se le llama a un producto que tiene una alta cuota de mercado pero en una industria de bajo crecimiento?',
+        options: ['Producto Estrella', 'Producto Perro', 'Producto Interrogante', 'Producto Vaca (Vaca lechera)'],
+        correctIndex: 3,
+        explanation: 'Las "vacas lecheras" requieren poca inversión y generan mucho flujo de efectivo para financiar otros proyectos de la empresa.'
+      },
+      {
+        question: '¿Quién es considerado ampliamente como el "padre del marketing moderno" por sus extensas obras y textos académicos?',
+        options: ['Philip Kotler', 'Adam Smith', 'Peter Drucker', 'Michael Porter'],
+        correctIndex: 0,
+        explanation: 'El libro "Dirección de Marketing" de Kotler es considerado la biblia académica de esta disciplina a nivel mundial.'
+      },
+      {
+        question: '¿Qué modelo estratégico, propuesto por Michael Porter, analiza la rivalidad competitiva mediante cinco factores de la industria?',
+        options: ['Las 5 Fuerzas', 'Las 5 S de Kaizen', 'La Pirámide de Maslow', 'El Ciclo de Deming'],
+        correctIndex: 0,
+        explanation: 'Evalúa a los competidores, los nuevos entrantes, los productos sustitutos y el poder de negociación de clientes y proveedores.'
+      },
+      {
+        question: '¿Qué significa el término "B2B" en los modelos de negocio comerciales?',
+        options: ['Business to Bank (Empresa a Banco)', 'Business to Business (Empresa a Empresa)', 'Back to Basics (Regreso a lo Básico)', 'Business to Buyer (Empresa a Comprador)'],
+        correctIndex: 1,
+        explanation: 'Describe transacciones comerciales entre empresas, como un fabricante de software que vende su sistema a otras compañías, en contraste con B2C (al consumidor final).'
+      },
+      {
+        question: '¿Qué estrategia de fijación de precios consiste en entrar al mercado con un precio muy bajo para ganar rápidamente cuota de mercado?',
+        options: ['Precio de descremado', 'Precios de penetración', 'Precio dinámico', 'Precio psicológico'],
+        correctIndex: 1,
+        explanation: 'Se utiliza para atraer clientes velozmente ante competidores establecidos, para luego subir los precios gradualmente una vez posicionado.'
+      },
+    ],
+  },
+  {
+    title: 'Marketing Digital y Web 2',
+    category: 'Marketing',
+    difficulty: 'MEDIUM',
+    questions: [
+      {
+        question: '¿Cuál es el propósito principal de una \'Landing Page\' (Página de Aterrizaje)?',
+        options: ['Mostrar la historia completa de la empresa', 'Convertir a los visitantes en leads o clientes', 'Alojar un blog de noticias', 'Mejorar la velocidad del sitio web'],
+        correctIndex: 1,
+        explanation: 'Una landing page está diseñada con un único objetivo o llamada a la acción (CTA), eliminando distracciones para maximizar las conversiones.'
+      },
+      {
+        question: '¿Qué significa el término KPI en analítica web y negocios?',
+        options: ['Key Performance Indicator (Indicador Clave de Rendimiento)', 'Known Product Interest (Interés Conocido del Producto)', 'Key Process Integration (Integración de Procesos Clave)', 'Keyboard Performance Index (Índice de Rendimiento de Teclado)'],
+        correctIndex: 0,
+        explanation: 'Los KPIs son métricas fundamentales que ayudan a una empresa a medir si están alcanzando sus objetivos estratégicos.'
+      },
+      {
+        question: '¿Qué es una prueba A/B (A/B Testing) en marketing digital?',
+        options: ['Un examen para contratar publicistas', 'Lanzar un producto en dos países distintos', 'Comparar dos versiones de una página web o anuncio para ver cuál funciona mejor', 'Probar dos navegadores web diferentes'],
+        correctIndex: 2,
+        explanation: 'Consiste en mostrar la versión A y la versión B a diferentes segmentos de tu audiencia para medir estadísticamente cuál genera más conversiones.'
+      },
+      {
+        question: '¿Qué mide el \'Engagement\' en las redes sociales?',
+        options: ['El número total de seguidores', 'El presupuesto gastado en publicidad', 'El nivel de interacción (likes, comentarios, compartidos) de la audiencia', 'La cantidad de veces que se sube contenido'],
+        correctIndex: 2,
+        explanation: 'El engagement indica qué tan comprometida y conectada está tu audiencia con el contenido que publicas.'
+      },
+      {
+        question: '¿Cuál es el objetivo principal del Inbound Marketing?',
+        options: ['Interrumpir al usuario con anuncios invasivos', 'Atraer clientes mediante contenido útil y relevante de forma orgánica', 'Comprar bases de datos de correos masivos', 'Llamar por teléfono a desconocidos'],
+        correctIndex: 1,
+        explanation: 'A diferencia del marketing tradicional (outbound), el inbound busca que el cliente te encuentre a ti cuando tiene una necesidad, ofreciéndole valor.'
+      },
+      {
+        question: '¿Qué función principal tienen las \'Cookies\' en el marketing digital?',
+        options: ['Acelerar la conexión a internet', 'Proteger la computadora de virus', 'Rastrear el comportamiento del usuario y recordar sus preferencias', 'Eliminar anuncios molestos'],
+        correctIndex: 2,
+        explanation: 'Las cookies guardan pequeños fragmentos de datos en el navegador del usuario para personalizar su experiencia y mostrarle anuncios relevantes.'
+      },
+      {
+        question: '¿Qué es el contenido \'Evergreen\' en un blog o sitio web?',
+        options: ['Contenido patrocinado por marcas ecológicas', 'Noticias de última hora', 'Contenido que no pierde vigencia y es relevante a lo largo del tiempo', 'Imágenes con mucho color verde'],
+        correctIndex: 2,
+        explanation: 'Un artículo como \'Cómo atarse los zapatos\' es evergreen porque la información no caduca, atrayendo tráfico continuo durante años.'
+      },
+      {
+        question: 'En email marketing, ¿qué es la tasa de apertura (Open Rate)?',
+        options: ['El número de enlaces clicados dentro del correo', 'El porcentaje de destinatarios que abrieron el correo electrónico', 'La cantidad de correos que llegaron a la carpeta de Spam', 'El costo de la plataforma de correos'],
+        correctIndex: 1,
+        explanation: 'Es una métrica crucial que indica si el asunto (subject) de tu correo fue lo suficientemente atractivo para llamar la atención del usuario.'
+      },
+      {
+        question: '¿Cuál es la función principal de un \'Hashtag\' (#) en redes sociales?',
+        options: ['Ocultar mensajes secretos', 'Clasificar y agrupar contenido por temas o tendencias', 'Mencionar a un usuario directamente', 'Hacer que el texto se vea más grande'],
+        correctIndex: 1,
+        explanation: 'El hashtag permite etiquetar palabras clave para que usuarios interesados en ese tema específico puedan encontrar tus publicaciones fácilmente.'
+      },
+      {
+        question: '¿Qué significa el modelo B2C en los negocios digitales?',
+        options: ['Business to Company (Empresa a Empresa)', 'Business to Consumer (Empresa a Consumidor)', 'Buyer to Creator (Comprador a Creador)', 'Brand to Community (Marca a Comunidad)'],
+        correctIndex: 1,
+        explanation: 'El modelo B2C describe a las empresas que venden sus productos o servicios directamente al usuario final (como un supermercado o tienda de ropa).'
+      },
+    ],
+  },
+  {
+    title: 'Marketing Digital y Web 3',
+    category: 'Marketing',
+    difficulty: 'HARD',
+    questions: [
+      {
+        question: '¿Qué es exactamente un \'Lead\' en el mundo del marketing digital?',
+        options: ['Un error en el código de la web', 'Una persona que ha proporcionado sus datos de contacto mostrando interés', 'Un anuncio de video', 'El gerente de la campaña publicitaria'],
+        correctIndex: 1,
+        explanation: 'Un lead es un cliente potencial que dejó su información (como el correo electrónico) en un formulario a cambio de algún beneficio.'
+      },
+      {
+        question: '¿Qué significan las siglas SEM?',
+        options: ['Search Engine Marketing', 'Social Engagement Metrics', 'Sales Email Management', 'System Error Monitor'],
+        correctIndex: 0,
+        explanation: 'A diferencia del SEO (orgánico), el SEM se refiere a las estrategias de marketing en buscadores pagando por anuncios (como Google Ads).'
+      },
+      {
+        question: 'En publicidad digital, ¿qué significa pagar por CPC?',
+        options: ['Costo Por Compra', 'Costo Por Clic', 'Costo Por Compartir', 'Costo Por Cliente'],
+        correctIndex: 1,
+        explanation: 'Bajo el modelo de Costo Por Clic, el anunciante solo paga cuando el usuario hace clic en el anuncio, independientemente de cuántas veces se muestre.'
+      },
+      {
+        question: '¿Qué es el \'Embudo de Conversión\' (Funnel)?',
+        options: ['Una herramienta de diseño gráfico', 'El proceso y etapas por las que pasa un usuario desde que conoce la marca hasta que compra', 'Un filtro para bloquear correos basura', 'El algoritmo de Instagram'],
+        correctIndex: 1,
+        explanation: 'El funnel representa el viaje del cliente (Awareness, Interest, Decision, Action) y cómo se van filtrando los prospectos hasta llegar a la venta.'
+      },
+      {
+        question: '¿Qué es un \'Lead Magnet\'?',
+        options: ['Un virus informático', 'Un influencer muy popular', 'Un incentivo gratuito que se ofrece a cambio de los datos de contacto de un usuario', 'Una valla publicitaria digital'],
+        correctIndex: 2,
+        explanation: 'Un ebook gratis, un descuento del 10% o un webinar son ejemplos clásicos de lead magnets utilizados para construir bases de datos.'
+      },
+      {
+        question: '¿Qué significa CRO (Conversion Rate Optimization)?',
+        options: ['Optimización de la Tasa de Conversión', 'Creación de Retornos Objetivos', 'Campañas de Remarketing Online', 'Control de Redes Oficiales'],
+        correctIndex: 0,
+        explanation: 'El CRO es un conjunto de técnicas para mejorar un sitio web con el fin de que un mayor porcentaje de visitantes realice la acción deseada (comprar, suscribirse).'
+      },
+      {
+        question: '¿Qué es el UGC (User Generated Content)?',
+        options: ['Contenido pagado por las marcas', 'Contenido creado y publicado por los propios clientes o usuarios sobre una marca', 'Un software para generar textos artificiales', 'Gráficos de uso corporativo'],
+        correctIndex: 1,
+        explanation: 'El UGC es altamente valioso porque funciona como prueba social auténtica; por ejemplo, un cliente subiendo una foto con su café a Instagram.'
+      },
+      {
+        question: 'En diseño web, ¿qué significa que una página sea \'Responsive\'?',
+        options: ['Que carga en menos de 1 segundo', 'Que tiene un chat en vivo', 'Que su diseño se adapta automáticamente a cualquier tamaño de pantalla (celular, tablet, PC)', 'Que requiere registro para entrar'],
+        correctIndex: 2,
+        explanation: 'El diseño responsive garantiza una buena experiencia de usuario sin importar el dispositivo desde el que se esté navegando.'
+      },
+      {
+        question: '¿Qué es el \'Buyer Persona\'?',
+        options: ['El dueño de la empresa', 'Una representación semi-ficticia de tu cliente ideal basada en datos reales', 'El carrito de compras de una web', 'El presupuesto asignado a compras'],
+        correctIndex: 1,
+        explanation: 'Crear un Buyer Persona ayuda a las marcas a entender mejor a su público, detallando su edad, gustos, dolores y comportamientos de compra.'
+      },
+      {
+        question: '¿Cuál es el objetivo fundamental del \'Copywriting\'?',
+        options: ['Proteger los derechos de autor', 'Diseñar logotipos atractivos', 'Escribir textos persuasivos con el objetivo de guiar al lector hacia una acción de compra', 'Programar el código fuente de un blog'],
+        correctIndex: 2,
+        explanation: 'El copywriter es un vendedor detrás de un teclado; redacta los textos de los anuncios, correos y páginas de venta utilizando psicología.'
+      },
+    ],
+  },
+  {
+    title: 'Marketing - Conceptos Básicos',
+    category: 'Marketing',
+    difficulty: 'EASY',
+    questions: [
+      {
+        question: '¿Qué es el \'Mercado Meta\' o \'Target\'?',
+        options: ['El competidor principal de la empresa', 'El grupo específico de consumidores al que una empresa dirige sus productos y mensajes', 'El precio máximo de un producto', 'La ubicación física de una tienda'],
+        correctIndex: 1,
+        explanation: 'El mercado meta es el segmento de la población que tiene más probabilidades de interesarse y comprar lo que ofreces.'
+      },
+      {
+        question: '¿Qué se entiende por \'Segmentación de Mercado\'?',
+        options: ['Dividir el mercado en grupos más pequeños con características o necesidades similares', 'Vender productos por partes', 'Cerrar sucursales no rentables', 'Subir los precios en diferentes zonas'],
+        correctIndex: 0,
+        explanation: 'La segmentación permite a las empresas personalizar sus estrategias; por ejemplo, segmentar por edad, género, ingresos o estilo de vida.'
+      },
+      {
+        question: 'En marketing tradicional, ¿qué es la Venta Cruzada (Cross-selling)?',
+        options: ['Vender productos a la competencia', 'Devolver un producto defectuoso', 'Ofrecer productos complementarios al artículo principal que el cliente está comprando', 'Cruzar la calle para atraer clientes'],
+        correctIndex: 2,
+        explanation: 'El ejemplo más famoso de venta cruzada es cuando pides una hamburguesa y te preguntan: "¿Le gustaría agregar papas y refresco?".'
+      },
+      {
+        question: '¿Qué es el Marketing \'Boca a boca\' (Word of Mouth)?',
+        options: ['Anuncios por radio', 'Vendedores gritando en la calle', 'La recomendación orgánica que hacen los clientes satisfechos a sus amigos y familiares', 'Probar comida en el supermercado'],
+        correctIndex: 2,
+        explanation: 'Es una de las formas de marketing más antiguas, económicas y efectivas, basada enteramente en la confianza y satisfacción del consumidor.'
+      },
+      {
+        question: '¿Cuáles son las fases tradicionales del \'Ciclo de Vida de un Producto\'?',
+        options: ['Introducción, Crecimiento, Madurez y Declive', 'Fabricación, Empaque, Venta y Consumo', 'Idea, Diseño, Producción y Distribución', 'Primavera, Verano, Otoño e Invierno'],
+        correctIndex: 0,
+        explanation: 'Todo producto atraviesa estas etapas, desde que se lanza al mercado, llega a su pico de ventas y eventualmente cae en desuso.'
+      },
+      {
+        question: '¿Qué significa Fidelizar a un cliente?',
+        options: ['Hacer que el cliente firme un contrato legal', 'Lograr que el cliente vuelva a comprar y se mantenga leal a la marca a largo plazo', 'Obligar al cliente a llevarse una membresía', 'Darle regalos caros a los usuarios nuevos'],
+        correctIndex: 1,
+        explanation: 'La fidelización busca crear un vínculo a largo plazo, ya que retener a un cliente antiguo suele ser mucho más barato que adquirir uno nuevo.'
+      },
+      {
+        question: '¿Qué es un Slogan (o Lema)?',
+        options: ['El manual de empleados', 'El nombre corporativo de la empresa', 'El precio de introducción', 'Una frase breve y fácil de recordar que resume la promesa o esencia de una marca'],
+        correctIndex: 3,
+        explanation: 'Un buen slogan atrapa la atención y se instala en la memoria colectiva, como el "Me encanta" de McDonald\'s.'
+      },
+      {
+        question: '¿Qué abarca el concepto de \'Branding\' (Gestión de marca)?',
+        options: ['Solo el diseño del logotipo', 'La gestión total de la identidad visual, valores, propósito y cómo el público percibe a la marca', 'El proceso de registrar el nombre legalmente', 'El embalaje de las cajas'],
+        correctIndex: 1,
+        explanation: 'El branding es el alma de la empresa; no es solo cómo se ve, sino cómo hace sentir a las personas y qué valores proyecta.'
+      },
+      {
+        question: '¿Qué es el \'Benchmarking\' en los negocios?',
+        options: ['Hacer bancos para las sucursales', 'Evaluar y comparar los productos, servicios y procesos de tu empresa frente a los líderes del sector', 'Un tipo de descuento por temporada', 'Medir el espacio en una tienda'],
+        correctIndex: 1,
+        explanation: 'Sirve para inspirarse en las mejores prácticas de la competencia o de otras industrias e implementarlas para mejorar continuamente.'
+      },
+      {
+        question: '¿Cuál es el objetivo del \'Merchandising\' en el punto de venta?',
+        options: ['Producir ropa para empleados', 'Estimular la compra directamente en la tienda mediante la presentación visual, iluminación y colocación de productos', 'Ofrecer créditos financieros', 'Repartir volantes en la calle'],
+        correctIndex: 1,
+        explanation: 'El merchandising busca maximizar la rentabilidad en la tienda física o digital, organizando el espacio para que el producto sea irresistible.'
       }
     ]
   }
+
 ];
-
 async function main() {
-  console.log('🌱 Starting seed...');
+  console.log('🌱 Starting seed/update...');
 
-  // Clear existing data in dependency order (respecting foreign keys)
-  console.log('🧹 Clearing existing data...');
-  await prisma.answer.deleteMany();
-  await prisma.attempt.deleteMany();
-  await prisma.bestScore.deleteMany();
-  await prisma.question.deleteMany();
-  await prisma.trivia.deleteMany();
-  await prisma.user.deleteMany();
+  // 1. ELIMINAMOS TODOS LOS deleteMany()
 
-  // Create admin user
-  console.log('👤 Creating admin user...');
-  const admin = await prisma.user.create({
-    data: {
+  // 2. Crear admin usando upsert (actualiza si existe, crea si no)
+  console.log('👤 Checking admin user...');
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@pumquiz.com' }, // Asume que 'email' es @unique en tu schema
+    update: {}, // No modificamos nada si ya existe
+    create: {
       email: 'admin@pumquiz.com',
       username: 'admin',
       phone: '+520000000000',
       birthday: new Date('1990-01-01'),
       passwordHash: await hashPassword('Admin@123'),
-      role: Role.ADMIN,
+      role: Role.ADMIN,// Asegúrate de usar el enum correcto (Role.ADMIN)
       emailVerified: true,
     },
   });
 
-  // Create two regular verified users (for leaderboard testing)
-  console.log('👥 Creating regular users...');
+  // 3. Crear usuarios regulares con upsert
+  console.log('👥 Checking regular users...');
   const regularUsers = [
     {
       email: 'player1@pumquiz.com',
@@ -1462,8 +1995,10 @@ async function main() {
   ];
 
   for (const user of regularUsers) {
-    await prisma.user.create({
-      data: {
+    await prisma.user.upsert({
+      where: { email: user.email },
+      update: {},
+      create: {
         email: user.email,
         username: user.username,
         phone: user.phone,
@@ -1475,15 +2010,26 @@ async function main() {
     });
   }
 
-  // Create trivias with nested questions
-  console.log('🎯 Creating trivias with questions...');
+  // 4. Crear trivias solo si el título no existe
+  console.log('🎯 Synchronizing trivias...');
   for (const trivia of trivias) {
+    // Buscamos si la trivia ya está en la base de datos
+    const existingTrivia = await prisma.trivia.findFirst({
+      where: { title: trivia.title }
+    });
+
+    if (existingTrivia) {
+      console.log(`  ⏩ Omitida (ya existe): "${trivia.title}"`);
+      continue; // Saltamos a la siguiente trivia
+    }
+
+    // Si no existe, la creamos junto con sus preguntas
     const created = await prisma.trivia.create({
       data: {
         title: trivia.title,
         category: trivia.category,
         difficulty: trivia.difficulty,
-        type: TriviaType.OFFICIAL,
+        type: TriviaType.OFFICIAL, // Ajusta según tu enum
         createdBy: admin.id,
         questions: {
           create: trivia.questions.map((q) => ({
@@ -1495,13 +2041,10 @@ async function main() {
         },
       },
     });
-    console.log(`   ✔ "${created.title}" (${trivia.questions.length} preguntas)`);
+    console.log(`  ✔ Creada: "${created.title}" (${trivia.questions.length} preguntas)`);
   }
 
-  console.log('✅ Seed complete!');
-  console.log('   - 1 admin (admin@pumquiz.com / Admin@123)');
-  console.log(`   - ${regularUsers.length} regular users (player1|player2@pumquiz.com / Player@123)`);
-  console.log(`   - ${trivias.length} trivias, each with 10 questions`);
+  console.log('✅ Sync complete!');
 }
 
 main()
