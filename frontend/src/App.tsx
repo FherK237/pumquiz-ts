@@ -15,7 +15,7 @@ import AddTriviaPage from './pages/AddTriviaPage';
 function App() {
   return (
     <div>
-          <BrowserRouter>
+    <BrowserRouter>
       <Routes>
         {/* Public routes (no navbar) */}
         <Route path="/login" element={<LoginPage />} />

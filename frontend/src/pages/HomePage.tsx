@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import AddTrivia from '../components/AddTrivia';
 import { ChevronDown } from 'lucide-react';
 
-const CATEGORIES = ['Science', 'History', 'Geography', 'Sports', 'Entertainment', 'Technology'];
+const CATEGORIES = ['Ciencia', 'Historia', 'Geografía', 'Deporte', 'Entretenimiento', 'Tecnología', 'Programación', 'Conocimiento General', 'Naturaleza' , 'Videojuegos', 'Autos', 'Cine y Animación', 'Mitologías', 'Arte y Literatura' ];
 const DIFFICULTIES: Trivia['difficulty'][] = ['EASY', 'MEDIUM', 'HARD'];
 
 export default function HomePage() {
@@ -15,7 +15,7 @@ export default function HomePage() {
   const [category, setCategory] = useState('');
   const [difficulty, setDifficulty] = useState('');
 
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
 
   // Custom select states
   const [categoryOpen, setCategoryOpen] = useState(false);
@@ -47,6 +47,17 @@ export default function HomePage() {
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [category, difficulty]);
+
+  // Intercepta el renderizado mientras carga la sesión
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-xl font-bold text-purple-600 animate-pulse">
+          Cargando PumQuiz...
+        </div>
+      </div>
+    );
+  }
 
   return (
       <div className="bg-gray-50 px-4 py-8 rounded-2xl m-5">
@@ -157,7 +168,6 @@ export default function HomePage() {
               ))}
             </div>
           )}
-
           <div>
             {user?.role === 'ADMIN' && (
               <AddTrivia />
